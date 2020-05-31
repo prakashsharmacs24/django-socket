@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title>Items</title>
+    {% load static %}
+    <script src="{% static '/items/websocketbridge.js' %}" type="text/javascript"></script>
+  </head>
+  <body>
+    <h1>Random Items</h1>
+    <ul id="itemlist"></ul>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const webSocketBridge = new channels.WebSocketBridge();
+      const nl = document.querySelector("#itemlist");
+      webSocketBridge.connect('/ws/items/');
+      webSocketBridge.listen(function(action, stream) {
+        var el = document.createElement("li");
+        el.innerHTML = `${action}`;
+        nl.appendChild(el);
+      })
+      document.ws = webSocketBridge; /* for debugging */
+    })
+    </script>
+   
+  </body>
+</html>
